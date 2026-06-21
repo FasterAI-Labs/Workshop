@@ -104,7 +104,7 @@ def plot_ai(layer_ai, target=None, ax=None, figsize=(14, 6), title=None, show=No
 
 
 @torch.no_grad()
-def quick_acc(m, n_batches=10):
+def quick_acc(m, n_batches=15):
     m.eval()
     dev = next(m.parameters()).device
     correct = total = 0
@@ -139,7 +139,7 @@ def score_model(model):
 def layer_stats(m, layer_name):
     """FLOPs, bytes and AI for ONE layer (table printing suppressed)."""
     with contextlib.redirect_stdout(io.StringIO()):
-        rows = compute_per_layer_ai(m, input_shape=(1, 3, IMAGE_SIZE, IMAGE_SIZE))
+        rows = compute_per_layer_ai(m, input_shape=(1, 3, 128, 128))
     for name, ops, byts, ai in rows:
         if name == layer_name:
             return ops, byts, ai
