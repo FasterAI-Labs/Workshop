@@ -15,7 +15,7 @@ from fasterbench.benchmark import benchmark
 from fasterbench.speed import compute_speed
 from fasterbench.profiling import LayerProfiler
 import copy
-
+import io, contextlib
 
 # ── Hardware targets (used by plot_ai's roofline ridge) ──────────────────────
 # plot_ai falls back to the module-level TARGET when no target is passed.
@@ -134,6 +134,16 @@ def sensitivity(model, image_size):
 def score_model(model):
     inp = dls.one_batch()[0][0][None]
     return compute_speed(model, inp).p99_ms, quick_acc(model)
+
+
+def layer_stats(m, layer_name):
+    """FLOPs, bytes and AI for ONE layer (table printing suppressed)."""
+    with contextlib.redirect_stdout(io.StringIO()):
+        rows = compute_per_layer_ai(m, input_shape=(1, 3, IMAGE_SIZE, IMAGE_SIZE))
+    for name, ops, byts, ai in rows:
+        if name == layer_name:
+            return ops, byts, ai
+    raise KeyError(layer_name)
 
 path = untar_data(URLs.PETS)
 files = get_image_files(path/"images")
