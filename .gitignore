@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Notebook backups
+*.bak
+
+# Local tooling / editor
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# Environments
+.venv/
+venv/
+env/
