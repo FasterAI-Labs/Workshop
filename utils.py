@@ -126,7 +126,7 @@ def quantize(model):
 
 
 _sens = partial(analyze_sensitivity, compression='pruning', level=50,
-                criteria=large_final, metric_name='accuracy', verbose=False)
+                criteria=large_final, metric_name='accuracy', verbose=False, layer_types=nn.Conv2d)
 
 def sensitivity(model, image_size):
     return _sens(model, torch.randn(1, 3, image_size, image_size), quick_acc)
